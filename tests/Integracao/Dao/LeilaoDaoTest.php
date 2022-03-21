@@ -12,8 +12,9 @@ class LeilaoDaoTest extends TestCase
 {
     public function testInsecaoEBuscaDevemFuncionar()
     {
-        $leilao = new Leilao('Variante )km');
-        $leilaoDao = new LeilaoDao(ConnectionCreator::getConnection());
+        $leilao = new Leilao('Variante 0km');
+        $con = ConnectionCreator::getConnection();
+        $leilaoDao = new LeilaoDao($con);
 
         $leilaoDao->salva($leilao);
 
@@ -22,9 +23,11 @@ class LeilaoDaoTest extends TestCase
         self::assertCount(1,$leiloes);
         self::assertContainsOnlyInstancesOf(Leilao::class,$leiloes);
         self::assertSame(
-            'Variante 0Km',
+            'Variante 0km',
             $leiloes[0]->recuperarDescricao()
         );
+
+        $con->exec('DELETE FROM leiloes WHERE true;');
     }
 
 }
